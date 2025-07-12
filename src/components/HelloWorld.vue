@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Cart  from './Cart.vue';
+import NameInput from "./NameInput.vue";
 
 
 const props = defineProps<{ msg: string, listItems: number, show: boolean  }>();
@@ -10,6 +11,17 @@ console.log(props.listItems)
 const items = new Array(props.listItems).fill(null).map((i, index) => `item ${index}`);
 
 const count = ref(0);
+const names = ref([]);
+const time = ref(null)
+
+const onNameAdded = (name, date) => {
+  names.value.push(name);
+  time.value = date;
+  setTimeout(() => {
+    time.value = null;
+  },3000)
+
+}
 
 </script>
 
@@ -45,7 +57,14 @@ const count = ref(0);
   </p>
   <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
 
+  <div v-if="time">{{  time }}</div>
+  <ul v-if="names.length" v-for="name in names">
+    <li :key="name">{{name}}</li>
+  </ul>
+
   <Cart />
+
+  <NameInput @name-add="onNameAdded"/>
 
 </template>
 
